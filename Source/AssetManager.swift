@@ -26,11 +26,19 @@ open class AssetManager {
 
   public static func fetch(withConfiguration configuration: ImagePickerConfiguration, _ completion: @escaping (_ assets: [PHAsset]) -> Void) {
     guard PHPhotoLibrary.authorizationStatus() == .authorized else { return }
+    
+    let fetchOptions = PHFetchOptions()
+    fetchOptions.sortDescriptors = [
+      NSSortDescriptor(
+        key: configuration.sortOrderKey.keyString,
+        ascending: configuration.sortOrderAscending
+      )
+    ]
 
     DispatchQueue.global(qos: .background).async {
       let fetchResult = configuration.allowVideoSelection
-        ? PHAsset.fetchAssets(with: PHFetchOptions())
-        : PHAsset.fetchAssets(with: .image, options: PHFetchOptions())
+        ? PHAsset.fetchAssets(with: fetchOptions)
+        : PHAsset.fetchAssets(with: .image, options: fetchOptions)
 
       if fetchResult.count > 0 {
         var assets = [PHAsset]()

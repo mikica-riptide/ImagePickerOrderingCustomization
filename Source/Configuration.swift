@@ -2,6 +2,20 @@ import AVFoundation
 import UIKit
 
 @objc public class ImagePickerConfiguration: NSObject {
+  
+  @objc public enum SortKey: Int {
+    case creationDate
+    case modificationDate
+    
+    var keyString: String {
+      switch self {
+      case .creationDate:
+        return  "creationDate"
+      case .modificationDate:
+        return "modificationDate"
+      }
+    }
+  }
 
   // MARK: Colors
 
@@ -63,6 +77,10 @@ import UIKit
     view.translatesAutoresizingMaskIntoConstraints = false
     return view
   }()
+  
+  // MARK: Sorting
+  @objc public var sortOrderAscending = true
+  @objc public var sortOrderKey: SortKey = .creationDate
 
   override public init() {}
 }
